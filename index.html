@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Маджонг</title>
+    <style type="text/css">
+        .item {
+            width: 150px;
+            height: 150px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            height: 680px;
+            width: 1150px;
+            margin-top: 0px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .gr {
+            outline: blue solid 5px;
+        }
+        .back {
+            height: 900px;
+            padding-top: 100px;
+            background-image: url(Background.jpg);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            overflow-y: hidden;
+        }
+        .timebox {
+            width: 280px;
+            font-size: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 6px solid darkgreen;
+            border-radius: 3px;
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body class="back">
+
+    <div class="timebox">Времени осталось: <span class="time"></span>секунд(ы)</div>
+    <div class="row"></div>
+
+    <script type="text/javascript">
+
+    let row = document.querySelector(".row");
+    let timebox = document.querySelector(".timebox");
+    let timeb = document.querySelector(".time");
+    let time = 20;
+    timeb.innerHTML = time;
+
+    let sc = 0;
+
+    let fst = null;
+
+    let images = ["1.png", "2.png", "3.webp", "4.png", "5.webp", "6.png", "7.webp", "8.webp", "9.png", "10.webp", "11.png", "12.webp", "1.png", "2.png", "3.webp", "4.png", "5.webp", "6.png", "7.webp", "8.webp", "9.png", "10.webp", "11.png", "12.webp"];
+
+    let random = function(arg){
+        let rand = Math.round(Math.random()*arg);
+        return rand;
+    }
+
+    for (let i=0; i<24; i++) {
+
+        let index = random(images.length - 1);
+        let item = document.createElement("div");
+        item.image = images[index];
+        row.appendChild(item);
+        item.classList.add("item");
+        item.style.backgroundImage = "url(" + images[index] + ")";
+        images.splice(index, 1)
+        item.onclick = function(){
+            item.classList.add("gr");
+            if(fst == null){
+                fst = item;
+            }
+            else if(item.image == fst.image){
+                sc = sc + 1;
+               item.style.visibility = "hidden";
+               fst.style.visibility = "hidden";
+               fst = null;
+            }
+            else if(item.image != fst.image){
+               fst.classList.remove("gr");
+               item.classList.remove("gr");
+               fst = null;
+            }
+        }
+    }
+
+    let timecount = function(){
+        time = time - 1;
+        timeb.innerHTML = time;
+    }
+
+    let stopInterval = setInterval(timecount, 1000)
+
+    let itog = function(){
+        timebox.style.display = "none";
+        row.style.display = "none";
+        if(sc==12){
+            alert("Ты выиграл!");
+        }
+        else if(sc!=12){
+            alert("Ты проиграл!");
+        }
+        
+        clearInterval(stopInterval);
+    }
+    
+    setTimeout(itog, 20000)
+
+    </script>
+</body>
+</html>
